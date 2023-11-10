@@ -539,7 +539,7 @@ int main()
 	}
 	std::cout << endl;
 
-	// Multiply of corresponding values of 2 matrice
+	// Multiply of corresponding values of 2 matrices
 	for (int row = 0; row < N; row++)
 	{
 		for (int col = 0; col < N; col++)
@@ -599,7 +599,6 @@ int main()
 		}
 		cout << endl;
 	}
-
 
 
 //	task1(); // complex arrays2D example
