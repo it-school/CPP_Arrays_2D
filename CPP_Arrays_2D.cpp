@@ -92,7 +92,7 @@ static void example1() {
 	cout << endl;
 
 
-	// Copy transposed matrix to another matrix
+	// Copy values of one matrix to another with transposing
 	cout << endl;
 	for (int row = 0; row < ROWS; ++row)
 	{
