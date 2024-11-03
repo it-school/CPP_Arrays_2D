@@ -9,4 +9,5 @@
   <li>Counting the number of Min and Max in a matrix</li>
   <li>Swapping neighboring rows of a matrix</li>
   <li>Swapping neighboring matrix columns</li>
+  <li>Matrix arithmetic operations</li>
 </ul>
