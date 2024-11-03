@@ -3,7 +3,7 @@
 
 using namespace std;
 
-void example1() {
+static void example1() {
 	const int ROWS = 10;
 	const int COLS = 10;
 	const int RANGE = 10;
@@ -20,14 +20,14 @@ void example1() {
 	for (int row = 1; row < ROWS; ++row)
 	{
 		for (int col = 1; col < COLS; ++col)
-			std::cout << setw(3) << product[row][col];
+			cout << setw(3) << product[row][col];
 
-		std::cout << std::endl;
+		cout << endl;
 	}
 
 	// Для перехода использования элементов двумерного массива в виде одномерного массива используем формулу:
 	// matrix[r][c] -> vector[r * COLS + c], где COLS - кол-во элементов в 1 строке матрицы (кол-во столбцов)
-	int array1D[ROWS * COLS];
+	int array1D[ROWS * COLS]{};
 
 	// Переписываем из двумерного массива в одномерный значения с их удвоением
 	int n = 0;
@@ -39,10 +39,10 @@ void example1() {
 		}
 	}
 
-	std::cout << std::endl;
+	cout << endl;
 	for (int i = 0; i < ROWS * COLS; ++i)
 	{
-		std::cout << array1D[i] << "  ";
+		cout << array1D[i] << "  ";
 	}
 
 	// Восстановление двумерного массива из одномерного вектора
@@ -54,54 +54,54 @@ void example1() {
 		}
 	}
 
-	std::cout << std::endl;
+	cout << endl;
 	for (int row = 0; row < ROWS; ++row)
 	{
 		for (int col = 0; col < COLS; ++col)
-			std::cout << setw(4) << product[row][col];
+			cout << setw(4) << product[row][col];
 
-		std::cout << std::endl;
+		cout << endl;
 	}
 
 
-	// Random matrix filling
-	std::cout << "\n\n";
+	// Matrix filling with random numbers within specified range
+	cout << "\n\n";
 	int array2[ROWS][COLS] = { 0 };
 	for (int row = 0; row < ROWS; ++row)
 	{
 		for (int col = 0; col < COLS; ++col)
-			std::cout << (product[row][col] = rand() % RANGE) << " ";
-		std::cout << std::endl;
+			cout << (product[row][col] = rand() % RANGE) << " ";
+		cout << endl;
 	}
 
 	// Elements of Main diagonal
-	std::cout << std::endl << "Elements of Main diagonal:" << std::endl;
+	cout << endl << "Elements of Main diagonal:" << endl;
 	for (int row = 0; row < ROWS; ++row)
 	{
-		std::cout << product[row][row] << " ";
+		cout << product[row][row] << " ";
 	}
-	std::cout << std::endl;
+	cout << endl;
 
 
 	// Elements of Secondary diagonal
-	std::cout << std::endl << "Elements of Secondary diagonal:" << std::endl;
+	cout << endl << "Elements of Secondary diagonal:" << endl;
 	for (int column = 0; column < COLS; ++column)
 	{
-		std::cout << product[ROWS - column - 1][column] << " ";
+		cout << product[ROWS - column - 1][column] << " ";
 	}
-	std::cout << std::endl;
+	cout << endl;
 
 
 	// Copy transposed matrix to another matrix
-	std::cout << std::endl;
+	cout << endl;
 	for (int row = 0; row < ROWS; ++row)
 	{
 		for (int col = 0; col < COLS; ++col)
 		{
-			std::cout << (row < col ? "\x1B[94m" : (row > col ? "\x1B[93m" : "\x1B[97m"))
+			cout << (row < col ? "\x1B[94m" : (row > col ? "\x1B[93m" : "\x1B[97m"))
 				<< (array2[row][col] = product[col][row]) << "\x1B[31m ";
 		}
-		std::cout << std::endl;
+		cout << endl;
 	}
 
 
@@ -117,7 +117,7 @@ void example1() {
 			}
 		}
 	}
-	std::cout << std::endl << "\x1B[31mSum of elements above main diagonal: " << sumAboveMainDiag << "\033[0m\n";
+	cout << endl << "\x1B[31mSum of elements above main diagonal: " << sumAboveMainDiag << "\033[0m\n";
 
 
 	// Elements forming British flag
@@ -166,8 +166,8 @@ void example1() {
 		}
 	}
 
-	std::cout << "\nMax element is: " << array2[rowMaxIndex][colMaxIndex] << ", it is situated: [" << rowMaxIndex << "][" << colMaxIndex << "]";
-	std::cout << "\nMin element is: " << array2[rowMinIndex][colMinIndex] << ", it is situated: [" << rowMinIndex << "][" << colMinIndex << "]\n\n";
+	cout << "\nMax element is: " << array2[rowMaxIndex][colMaxIndex] << ", it is situated: [" << rowMaxIndex << "][" << colMaxIndex << "]";
+	cout << "\nMin element is: " << array2[rowMinIndex][colMinIndex] << ", it is situated: [" << rowMinIndex << "][" << colMinIndex << "]\n\n";
 
 
 	// Counting of Min and Max quantity in matrix
@@ -178,31 +178,31 @@ void example1() {
 		{
 			if (array2[row][col] == array2[rowMaxIndex][colMaxIndex])
 			{
-				std::cout << "\x1B[95m";
+				cout << "\x1B[95m";
 				maxCounter++;
 			}
 			else
 				if (array2[row][col] == array2[rowMinIndex][colMinIndex])
 				{
-					std::cout << "\x1B[96m";
+					cout << "\x1B[96m";
 					minCounter++;
 				}
 
-			std::cout << array2[row][col] << " ";
+			cout << array2[row][col] << " ";
 			// if ((array2[row][col] == array2[rowMaxIndex][colMaxIndex]) || (array2[row][col] == array2[rowMinIndex][colMinIndex]))
 			{
-				std::cout << "\033[0m";
+				cout << "\033[0m";
 			}
 		}
-		std::cout << std::endl;
+		cout << endl;
 	}
-	std::cout << "\nMax element is: " << array2[rowMaxIndex][colMaxIndex] << ", it is quantity: " << maxCounter;
-	std::cout << "\nMin element is: " << array2[rowMinIndex][colMinIndex] << ", it is quantity: " << minCounter;
+	cout << "\nMax element is: " << array2[rowMaxIndex][colMaxIndex] << ", it is quantity: " << maxCounter;
+	cout << "\nMin element is: " << array2[rowMinIndex][colMinIndex] << ", it is quantity: " << minCounter;
 
 
 
 	// Exchange of neighbor rows of matrix (even and odd rows)
-	std::cout << "\n\n";
+	cout << "\n\n";
 	int max = array2[rowMaxIndex][colMaxIndex];
 	int min = array2[rowMinIndex][colMinIndex];
 	int temp;
@@ -224,27 +224,27 @@ void example1() {
 		{
 			if (array2[row][col] == max)
 			{
-				std::cout << "\x1B[95m";
+				cout << "\x1B[95m";
 			}
 			if (array2[row][col] == min)
 			{
-				std::cout << "\x1B[96m";
+				cout << "\x1B[96m";
 			}
 
-			std::cout << array2[row][col] << " ";
+			cout << array2[row][col] << " ";
 			// This will not work here: 
 			// if ((array2[row][col] == array2[rowMaxIndex][colMaxIndex]) || (array2[row][col] == array2[rowMinIndex][colMinIndex]))
 			if ((array2[row][col] == max) || (array2[row][col] == min))
 			{
-				std::cout << "\033[0m";
+				cout << "\033[0m";
 			}
 		}
-		std::cout << std::endl;
+		cout << endl;
 	}
 
 
 	// Exchange of neighbour columns of matrix (even and odd)
-	std::cout << "\n\n";
+	cout << "\n\n";
 	for (int col = 0; col < COLS; col += 2)
 	{
 		for (int row = 0; row < ROWS; ++row)
@@ -262,26 +262,26 @@ void example1() {
 		{
 			if (array2[row][col] == max)
 			{
-				std::cout << "\x1B[95m";
+				cout << "\x1B[95m";
 			}
 			if (array2[row][col] == min)
 			{
-				std::cout << "\x1B[96m";
+				cout << "\x1B[96m";
 			}
 
-			std::cout << array2[row][col] << " ";
+			cout << array2[row][col] << " ";
 			if ((array2[row][col] == max) || (array2[row][col] == min))
 			{
-				std::cout << "\033[0m";
+				cout << "\033[0m";
 			}
 		}
-		std::cout << std::endl;
+		cout << endl;
 	}
 
 	// Matrix arifmetical operaions
-	std::cout << "\n\n----------------------------\n\n";
+	cout << "\n\n----------------------------\n\n";
 	const int N = 5;
-	int m1[N][N] = { 0 }, m2[N][N] = { 0 }, m3[N][N];
+	int m1[N][N] = { 0 }, m2[N][N] = { 0 }, m3[N][N]{};
 
 	for (int row = 0; row < N; row++)
 	{
@@ -298,24 +298,24 @@ void example1() {
 	{
 		for (int col = 0; col < N; col++)
 		{
-			std::cout << m1[row][col] << " ";
+			cout << m1[row][col] << " ";
 		}
 
-		std::cout << "\t";
+		cout << "\t";
 		for (int col = 0; col < N; col++)
 		{
-			std::cout << m2[row][col] << " ";
+			cout << m2[row][col] << " ";
 		}
 
-		std::cout << "\t";
+		cout << "\t";
 		for (int col = 0; col < N; col++)
 		{
-			std::cout << setw(4) << m3[row][col];
+			cout << setw(4) << m3[row][col];
 		}
 
-		std::cout << endl;
+		cout << endl;
 	}
-	std::cout << endl;
+	cout << endl;
 
 	// Multiply of corresponding values of 2 matrices
 	for (int row = 0; row < N; row++)
@@ -331,28 +331,28 @@ void example1() {
 	{
 		for (int col = 0; col < N; col++)
 		{
-			std::cout << m1[row][col] << " ";
+			cout << m1[row][col] << " ";
 		}
 
-		std::cout << "\t";
+		cout << "\t";
 		for (int col = 0; col < N; col++)
 		{
-			std::cout << m2[row][col] << " ";
+			cout << m2[row][col] << " ";
 		}
 
-		std::cout << "\t";
+		cout << "\t";
 		for (int col = 0; col < N; col++)
 		{
-			std::cout << setw(4) << m3[row][col];
+			cout << setw(4) << m3[row][col];
 		}
 
-		std::cout << endl;
+		cout << endl;
 	}
 
 
 	// 3D array
 	const int LAYERS = 2;
-	int array3D[LAYERS][ROWS][COLS];
+	int array3D[LAYERS][ROWS][COLS]{};
 	for (int layer = 0; layer < LAYERS; layer++)
 	{
 		for (int row = 0; row < ROWS; row++)
@@ -364,7 +364,7 @@ void example1() {
 		}
 	}
 
-	std::cout << endl << "3D arrays: Layers of Matrices" << endl;
+	cout << endl << "3D arrays: Layers of Matrices" << endl;
 	for (int layer = 0; layer < LAYERS; layer++)
 	{
 		for (int row = 0; row < ROWS; row++)
@@ -384,7 +384,7 @@ void example1() {
 /// а) максимальную сумму абсолютных значений элементов по строкам и номер строки с такой суммой;
 /// б) максимальную сумму абсолютных значений элементов по столбцам и номер столбца с такой суммой
 /// </summary>
-void example2() {
+static void example2() {
 	const int ROWS = 10;
 	const int COLS = 10;
 	const int RANGE = 10;
@@ -410,16 +410,16 @@ void example2() {
 		}
 	}
 
-	std::cout << endl << "Sums of rows absolute values: ";
+	cout << endl << "Sums of rows absolute values: ";
 	for (int row = 0; row < ROWS; ++row)
 	{
-		std::cout << sumForRows[row] << "\t";
+		cout << sumForRows[row] << "\t";
 	}
 
-	std::cout << endl << "Sums of columns absolute values: ";
+	cout << endl << "Sums of columns absolute values: ";
 	for (int col = 0; col < COLS; ++col)
 	{
-		std::cout << sumForCols[col] << "\t";
+		cout << sumForCols[col] << "\t";
 	}
 
 	int maxRowSumsIndex = 0, maxColSumsIndex = 0;
@@ -434,21 +434,21 @@ void example2() {
 			maxColSumsIndex = col;
 	}
 
-	std::cout << endl << "Maximum of Sums of rows absolute values: \x1B[105m" << sumForRows[maxRowSumsIndex] << "\033[0m";
-	std::cout << endl << "Maximum of Sums of cols absolute values: \x1B[105m" << sumForCols[maxColSumsIndex] << "\033[0m";
+	cout << endl << "Maximum of Sums of rows absolute values: \x1B[105m" << sumForRows[maxRowSumsIndex] << "\033[0m";
+	cout << endl << "Maximum of Sums of cols absolute values: \x1B[105m" << sumForCols[maxColSumsIndex] << "\033[0m";
 }
 
 /// <summary>
 /// Произвести расчёт разнообразной статистики по результатам работы корпорации из 8 филиалов в течение 12 месяцев
 /// </summary>
-void example3()
+static void example3()
 {
 	cout << endl << " -----------------------------------------------------------------";
 	cout << endl << "| Income of 8 COMPANIES for 12 MONTHS. Calculating all statistics |";
 	cout << endl << " -----------------------------------------------------------------" << endl << endl;
 
 	const int MONTHS = 12, COMPANIES = 8;
-	int income[MONTHS][COMPANIES];
+	int income[MONTHS][COMPANIES]{};
 
 	for (int month = 0; month < MONTHS; month++)
 	{
@@ -461,8 +461,8 @@ void example3()
 	}
 	cout << endl;
 
-	int totalIncomeByMonth[MONTHS], totalIncomeByCompanies[COMPANIES];
-	double averageIncomeByMonth[MONTHS], averageIncomeByCompanies[COMPANIES];
+	int totalIncomeByMonth[MONTHS]{}, totalIncomeByCompanies[COMPANIES]{};
+	double averageIncomeByMonth[MONTHS]{}, averageIncomeByCompanies[COMPANIES]{};
 	double averageInCorporation = 0;
 
 	for (int month = 0; month < MONTHS; month++)
@@ -624,6 +624,6 @@ int main()
 	example2(); // simple matrix processing
 	example3(); // realword arrays2D example
 
-	std::cout << endl;
-	std::cout << endl;
+	cout << endl;
+	cout << endl;
 }
