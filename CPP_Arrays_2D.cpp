@@ -92,7 +92,7 @@ static void example1() {
 	cout << endl;
 
 
-	// Copy values of one matrix to another with transposing
+	// Copying values of one matrix into another with transpose
 	cout << endl;
 	for (int row = 0; row < ROWS; ++row)
 	{
@@ -105,7 +105,7 @@ static void example1() {
 	}
 
 
-	// Sum of elements above Main diagonal
+	// Calculating the sum of elements over the main diagonal
 	int sumAboveMainDiag = 0;
 	for (int row = 0; row < ROWS; ++row)
 	{
@@ -120,7 +120,7 @@ static void example1() {
 	cout << endl << "\x1B[31mSum of elements above main diagonal: " << sumAboveMainDiag << "\033[0m\n";
 
 
-	// Elements forming British flag
+	// Filling with elements forming the British flag
 	cout << endl << " Elements as British flag: " << endl;
 	for (int row = 0; row < ROWS; row++)
 	{
@@ -144,7 +144,7 @@ static void example1() {
 	}
 
 
-	// Max and Min element of matrix
+	// Finding the maximum and minimum element of a matrix
 	int rowMaxIndex = 0, colMaxIndex = 0, rowMinIndex = 0, colMinIndex = 0;
 	for (int row = 0; row < ROWS; ++row)
 	{
@@ -170,7 +170,7 @@ static void example1() {
 	cout << "\nMin element is: " << array2[rowMinIndex][colMinIndex] << ", it is situated: [" << rowMinIndex << "][" << colMinIndex << "]\n\n";
 
 
-	// Counting of Min and Max quantity in matrix
+	// Counting the number of Min and Max in a matrix
 	int maxCounter = 0, minCounter = 0;
 	for (int row = 0; row < ROWS; ++row)
 	{
@@ -201,7 +201,7 @@ static void example1() {
 
 
 
-	// Exchange of neighbor rows of matrix (even and odd rows)
+	// Swapping neighboring rows of a matrix (even and odd rows)
 	cout << "\n\n";
 	int max = array2[rowMaxIndex][colMaxIndex];
 	int min = array2[rowMinIndex][colMinIndex];
@@ -243,7 +243,7 @@ static void example1() {
 	}
 
 
-	// Exchange of neighbour columns of matrix (even and odd)
+	// Swapping neighboring matrix columns (even and odd)
 	cout << "\n\n";
 	for (int col = 0; col < COLS; col += 2)
 	{
@@ -278,7 +278,7 @@ static void example1() {
 		cout << endl;
 	}
 
-	// Matrix arifmetical operaions
+	// Matrix arithmetic operations
 	cout << "\n\n----------------------------\n\n";
 	const int N = 5;
 	int m1[N][N] = { 0 }, m2[N][N] = { 0 }, m3[N][N]{};
@@ -293,7 +293,7 @@ static void example1() {
 		}
 	}
 
-	// Printing matrices horisontaly
+	// Printing matrices horizontaly
 	for (int row = 0; row < N; row++)
 	{
 		for (int col = 0; col < N; col++)
@@ -326,7 +326,7 @@ static void example1() {
 		}
 	}
 
-	// Printing matrices horisontaly
+	// Printing matrices horizontaly
 	for (int row = 0; row < N; row++)
 	{
 		for (int col = 0; col < N; col++)
@@ -359,7 +359,7 @@ static void example1() {
 		{
 			for (int column = 0; column < COLS; column++)
 			{
-				array3D[layer][row][column] = rand() % 10;
+				array3D[layer][row][column] = rand() % 100;
 			}
 		}
 	}
