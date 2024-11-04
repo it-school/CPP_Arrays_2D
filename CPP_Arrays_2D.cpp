@@ -5,42 +5,42 @@ using namespace std;
 
 static void example1() {
 	const int ROWS = 10;
-	const int COLS = 10;
+	const int COLUMNS = 10;
 	const int RANGE = 10;
 
-	// Объявляем массив ROWSxCOLS (10x10) и заполняем его нулями
-	int product[ROWS][COLS] = { 0 };
+	// Объявляем массив ROWSxCOLUMNS (10x10) и заполняем его нулями
+	int product[ROWS][COLUMNS] = { 0 };
 
 	// Создаем таблицу умножения
 	for (int row = 0; row < ROWS; ++row)
-		for (int column = 0; column < COLS; ++column)
+		for (int column = 0; column < COLUMNS; ++column)
 			product[row][column] = row * column;
 
 	// Выводим таблицу умножения без первой строки и первого столбца с нулями
 	for (int row = 1; row < ROWS; ++row)
 	{
-		for (int col = 1; col < COLS; ++col)
+		for (int col = 1; col < COLUMNS; ++col)
 			cout << setw(3) << product[row][col];
 
 		cout << endl;
 	}
 
 	// Для перехода использования элементов двумерного массива в виде одномерного массива используем формулу:
-	// matrix[r][c] -> vector[r * COLS + c], где COLS - кол-во элементов в 1 строке матрицы (кол-во столбцов)
-	int array1D[ROWS * COLS]{};
+	// matrix[r][c] -> vector[r * COLUMNS + c], где COLUMNS - кол-во элементов в 1 строке матрицы (кол-во столбцов)
+	int array1D[ROWS * COLUMNS]{};
 
 	// Переписываем из двумерного массива в одномерный значения с их удвоением
 	int n = 0;
 	for (int row = 0; row < ROWS; ++row)
 	{
-		for (int column = 0; column < COLS; ++column)
+		for (int column = 0; column < COLUMNS; ++column)
 		{
 			array1D[n++] = product[row][column] * 2;
 		}
 	}
 
 	cout << endl;
-	for (int i = 0; i < ROWS * COLS; ++i)
+	for (int i = 0; i < ROWS * COLUMNS; ++i)
 	{
 		cout << array1D[i] << "  ";
 	}
@@ -48,28 +48,30 @@ static void example1() {
 	// Восстановление двумерного массива из одномерного вектора
 	n = 0;
 	for (int row = 0; row < ROWS; ++row) {
-		for (int column = 0; column < COLS; ++column)
+		for (int column = 0; column < COLUMNS; ++column)
 		{
 			product[row][column] = array1D[n++];
 		}
 	}
 
 	cout << endl;
+	// n = 0;
 	for (int row = 0; row < ROWS; ++row)
 	{
-		for (int col = 0; col < COLS; ++col)
+		for (int col = 0; col < COLUMNS; ++col) {
 			cout << setw(4) << product[row][col];
-
+			// cout << setw(4) << array1D[n++];
+		}
 		cout << endl;
 	}
 
 
 	// Matrix filling with random numbers within specified range
 	cout << "\n\n";
-	int array2[ROWS][COLS] = { 0 };
+	int array2[ROWS][COLUMNS] = { 0 };
 	for (int row = 0; row < ROWS; ++row)
 	{
-		for (int col = 0; col < COLS; ++col)
+		for (int col = 0; col < COLUMNS; ++col)
 			cout << (product[row][col] = rand() % RANGE) << " ";
 		cout << endl;
 	}
@@ -85,7 +87,7 @@ static void example1() {
 
 	// Elements of Secondary diagonal
 	cout << endl << "Elements of Secondary diagonal:" << endl;
-	for (int column = 0; column < COLS; ++column)
+	for (int column = 0; column < COLUMNS; ++column)
 	{
 		cout << product[ROWS - column - 1][column] << " ";
 	}
@@ -96,7 +98,7 @@ static void example1() {
 	cout << endl;
 	for (int row = 0; row < ROWS; ++row)
 	{
-		for (int col = 0; col < COLS; ++col)
+		for (int col = 0; col < COLUMNS; ++col)
 		{
 			cout << (row < col ? "\x1B[94m" : (row > col ? "\x1B[93m" : "\x1B[97m"))
 				<< (array2[row][col] = product[col][row]) << "\x1B[31m ";
@@ -109,7 +111,7 @@ static void example1() {
 	int sumAboveMainDiag = 0;
 	for (int row = 0; row < ROWS; ++row)
 	{
-		for (int col = 0; col < COLS; ++col)
+		for (int col = 0; col < COLUMNS; ++col)
 		{
 			if (row < col)
 			{
@@ -124,18 +126,18 @@ static void example1() {
 	cout << endl << " Elements as British flag: " << endl;
 	for (int row = 0; row < ROWS; row++)
 	{
-		for (int column = 0; column < COLS; column++)
+		for (int column = 0; column < COLUMNS; column++)
 		{
 			if (row == column)
 				cout << array2[row][column] << "  ";
 			else
-				if (row + column == (COLS < ROWS ? COLS : ROWS) - 1)
+				if (row + column == (COLUMNS < ROWS ? COLUMNS : ROWS) - 1)
 					cout << array2[row][column] << "  ";
 				else
 					if (row == ROWS / 2)
 						cout << array2[row][column] << "  ";
 					else
-						if (column == COLS / 2)
+						if (column == COLUMNS / 2)
 							cout << array2[row][column] << "  ";
 						else
 							cout << "   ";
@@ -148,7 +150,7 @@ static void example1() {
 	int rowMaxIndex = 0, colMaxIndex = 0, rowMinIndex = 0, colMinIndex = 0;
 	for (int row = 0; row < ROWS; ++row)
 	{
-		for (int col = 0; col < COLS; ++col)
+		for (int col = 0; col < COLUMNS; ++col)
 		{
 			if (array2[row][col] > array2[rowMaxIndex][colMaxIndex])
 			{
@@ -174,7 +176,7 @@ static void example1() {
 	int maxCounter = 0, minCounter = 0;
 	for (int row = 0; row < ROWS; ++row)
 	{
-		for (int col = 0; col < COLS; ++col)
+		for (int col = 0; col < COLUMNS; ++col)
 		{
 			if (array2[row][col] == array2[rowMaxIndex][colMaxIndex])
 			{
@@ -208,7 +210,7 @@ static void example1() {
 	int temp;
 	for (int row = 0; row < ROWS; row += 2)
 	{
-		for (int col = 0; col < COLS; ++col)
+		for (int col = 0; col < COLUMNS; ++col)
 		{
 			temp = array2[row][col];
 			array2[row][col] = array2[row + 1][col];
@@ -220,7 +222,7 @@ static void example1() {
 	// Coloring of Max and Min value during matrix printing
 	for (int row = 0; row < ROWS; ++row)
 	{
-		for (int col = 0; col < COLS; ++col)
+		for (int col = 0; col < COLUMNS; ++col)
 		{
 			if (array2[row][col] == max)
 			{
@@ -245,7 +247,7 @@ static void example1() {
 
 	// Swapping neighboring matrix columns (even and odd)
 	cout << "\n\n";
-	for (int col = 0; col < COLS; col += 2)
+	for (int col = 0; col < COLUMNS; col += 2)
 	{
 		for (int row = 0; row < ROWS; ++row)
 		{
@@ -258,7 +260,7 @@ static void example1() {
 	// Coloring of Max and Min value during matrix printing
 	for (int row = 0; row < ROWS; ++row)
 	{
-		for (int col = 0; col < COLS; ++col)
+		for (int col = 0; col < COLUMNS; ++col)
 		{
 			if (array2[row][col] == max)
 			{
@@ -352,12 +354,12 @@ static void example1() {
 
 	// 3D array
 	const int LAYERS = 2;
-	int array3D[LAYERS][ROWS][COLS]{};
+	int array3D[LAYERS][ROWS][COLUMNS]{};
 	for (int layer = 0; layer < LAYERS; layer++)
 	{
 		for (int row = 0; row < ROWS; row++)
 		{
-			for (int column = 0; column < COLS; column++)
+			for (int column = 0; column < COLUMNS; column++)
 			{
 				array3D[layer][row][column] = rand() % 100;
 			}
@@ -369,9 +371,9 @@ static void example1() {
 	{
 		for (int row = 0; row < ROWS; row++)
 		{
-			for (int column = 0; column < COLS; column++)
+			for (int column = 0; column < COLUMNS; column++)
 			{
-				cout << array3D[layer][row][column] << "  ";
+				cout << setw(4) << array3D[layer][row][column];
 			}
 			cout << endl;
 		}
@@ -386,17 +388,17 @@ static void example1() {
 /// </summary>
 static void example2() {
 	const int ROWS = 10;
-	const int COLS = 10;
+	const int COLUMNS = 10;
 	const int RANGE = 10;
-	int array2[ROWS][COLS] = { 0 };
+	int array2[ROWS][COLUMNS] = { 0 };
 
-	int product[ROWS][COLS] = { 0 };
+	int product[ROWS][COLUMNS] = { 0 };
 	int sumForRows[ROWS] = { 0 };
-	int sumForCols[COLS] = { 0 };
+	int sumForCOLUMNS[COLUMNS] = { 0 };
 
 	for (int row = 0; row < ROWS; ++row)
 	{
-		for (int col = 0; col < COLS; ++col)
+		for (int col = 0; col < COLUMNS; ++col)
 		{
 			sumForRows[row] += abs(array2[row][col]);
 		}
@@ -404,9 +406,9 @@ static void example2() {
 
 	for (int row = 0; row < ROWS; ++row)
 	{
-		for (int col = 0; col < COLS; ++col)
+		for (int col = 0; col < COLUMNS; ++col)
 		{
-			sumForCols[col] += abs(array2[row][col]);
+			sumForCOLUMNS[col] += abs(array2[row][col]);
 		}
 	}
 
@@ -417,25 +419,25 @@ static void example2() {
 	}
 
 	cout << endl << "Sums of columns absolute values: ";
-	for (int col = 0; col < COLS; ++col)
+	for (int col = 0; col < COLUMNS; ++col)
 	{
-		cout << sumForCols[col] << "\t";
+		cout << sumForCOLUMNS[col] << "\t";
 	}
 
-	int maxRowSumsIndex = 0, maxColSumsIndex = 0;
+	int maxRowSumsIndex = 0, maxCOLUMNSumsIndex = 0;
 	for (int row = 1; row < ROWS; ++row)
 	{
 		if (sumForRows[row] > sumForRows[maxRowSumsIndex])
 			maxRowSumsIndex = row;
 	}
-	for (int col = 1; col < COLS; ++col)
+	for (int col = 1; col < COLUMNS; ++col)
 	{
-		if (sumForCols[col] > sumForCols[maxColSumsIndex])
-			maxColSumsIndex = col;
+		if (sumForCOLUMNS[col] > sumForCOLUMNS[maxCOLUMNSumsIndex])
+			maxCOLUMNSumsIndex = col;
 	}
 
 	cout << endl << "Maximum of Sums of rows absolute values: \x1B[105m" << sumForRows[maxRowSumsIndex] << "\033[0m";
-	cout << endl << "Maximum of Sums of cols absolute values: \x1B[105m" << sumForCols[maxColSumsIndex] << "\033[0m";
+	cout << endl << "Maximum of Sums of COLUMNS absolute values: \x1B[105m" << sumForCOLUMNS[maxCOLUMNSumsIndex] << "\033[0m";
 }
 
 /// <summary>
