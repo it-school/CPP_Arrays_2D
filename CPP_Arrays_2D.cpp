@@ -1,380 +1,208 @@
 #include <iostream>
 #include <iomanip>
-
+#include <cstdlib>   // для rand()
+#include <ctime>     // для time()
+#include <cmath>     // для abs()
 using namespace std;
 
+/// <summary>
+/// Демонстрация различных операций с двумерными массивами:
+/// ввод, обработка и анализ 2D массива.
+/// </summary>
 static void example1() {
 	const int ROWS = 10;
 	const int COLUMNS = 10;
 	const int RANGE = 10;
 
-	// Объявляем массив ROWSxCOLUMNS (10x10) и заполняем его нулями
+	// Объявляем массив ROWSxCOLUMNS и заполняем нулями
 	int product[ROWS][COLUMNS] = { 0 };
 
-	// Создаем таблицу умножения
+	// Создание таблицы умножения
 	for (int row = 0; row < ROWS; ++row)
 		for (int column = 0; column < COLUMNS; ++column)
 			product[row][column] = row * column;
 
-	// Выводим таблицу умножения без первой строки и первого столбца с нулями
-	for (int row = 1; row < ROWS; ++row)
-	{
+	// Вывод таблицы без первой строки и столбца (чтобы пропустить нули)
+	for (int row = 1; row < ROWS; ++row) {
 		for (int col = 1; col < COLUMNS; ++col)
 			cout << setw(3) << product[row][col];
-
 		cout << endl;
 	}
 
-	// Для перехода использования элементов двумерного массива в виде одномерного массива используем формулу:
-	// matrix[r][c] -> vector[r * COLUMNS + c], где COLUMNS - кол-во элементов в 1 строке матрицы (кол-во столбцов)
+	// Работа с одномерным массивом как с плоской копией двумерного
 	int array1D[ROWS * COLUMNS]{};
-
-	// Переписываем из двумерного массива в одномерный значения с их удвоением
 	int n = 0;
 	for (int row = 0; row < ROWS; ++row)
-	{
 		for (int column = 0; column < COLUMNS; ++column)
-		{
-			array1D[n++] = product[row][column] * 2;
-		}
-	}
+			array1D[n++] = product[row][column] * 2; // удвоение элементов
 
 	cout << endl;
 	for (int i = 0; i < ROWS * COLUMNS; ++i)
-	{
 		cout << array1D[i] << "  ";
-	}
 
-	// Восстановление двумерного массива из одномерного вектора
+	// Восстановление двумерного массива из одномерного
 	n = 0;
-	for (int row = 0; row < ROWS; ++row) {
+	for (int row = 0; row < ROWS; ++row)
 		for (int column = 0; column < COLUMNS; ++column)
-		{
 			product[row][column] = array1D[n++];
-		}
-	}
 
 	cout << endl;
-	// n = 0;
-	for (int row = 0; row < ROWS; ++row)
-	{
-		for (int col = 0; col < COLUMNS; ++col) {
+	for (int row = 0; row < ROWS; ++row) {
+		for (int col = 0; col < COLUMNS; ++col)
 			cout << setw(4) << product[row][col];
-			// cout << setw(4) << array1D[n++];
-		}
 		cout << endl;
 	}
 
-
-	// Matrix filling with random numbers within specified range
+	// Генерация случайной матрицы и вывод
 	cout << "\n\n";
 	int array2[ROWS][COLUMNS] = { 0 };
-	for (int row = 0; row < ROWS; ++row)
-	{
+	srand(static_cast<unsigned>(time(nullptr))); // инициализация генератора случайных чисел
+	for (int row = 0; row < ROWS; ++row) {
 		for (int col = 0; col < COLUMNS; ++col)
 			cout << (product[row][col] = rand() % RANGE) << " ";
 		cout << endl;
 	}
 
-	// Elements of Main diagonal
+	// Главная диагональ
 	cout << endl << "Elements of Main diagonal:" << endl;
 	for (int row = 0; row < ROWS; ++row)
-	{
 		cout << product[row][row] << " ";
-	}
 	cout << endl;
 
-
-	// Elements of Secondary diagonal
+	// Побочная диагональ
 	cout << endl << "Elements of Secondary diagonal:" << endl;
 	for (int column = 0; column < COLUMNS; ++column)
-	{
 		cout << product[ROWS - column - 1][column] << " ";
-	}
 	cout << endl;
 
-
-	// Copying values of one matrix into another with transpose
+	// Транспонирование матрицы с подсветкой элементов
 	cout << endl;
-	for (int row = 0; row < ROWS; ++row)
-	{
-		for (int col = 0; col < COLUMNS; ++col)
-		{
+	for (int row = 0; row < ROWS; ++row) {
+		for (int col = 0; col < COLUMNS; ++col) {
 			cout << (row < col ? "\x1B[94m" : (row > col ? "\x1B[93m" : "\x1B[97m"))
 				<< (array2[row][col] = product[col][row]) << "\x1B[31m ";
 		}
 		cout << endl;
 	}
 
-
-	// Calculating the sum of elements over the main diagonal
+	// Сумма элементов над главной диагональю
 	int sumAboveMainDiag = 0;
 	for (int row = 0; row < ROWS; ++row)
-	{
 		for (int col = 0; col < COLUMNS; ++col)
-		{
 			if (row < col)
-			{
 				sumAboveMainDiag += array2[row][col];
-			}
-		}
-	}
 	cout << endl << "\x1B[31mSum of elements above main diagonal: " << sumAboveMainDiag << "\033[0m\n";
 
-
-	// Filling with elements forming the British flag
+	// Элементы, формирующие "британский флаг"
 	cout << endl << " Elements as British flag: " << endl;
-	for (int row = 0; row < ROWS; row++)
-	{
-		for (int column = 0; column < COLUMNS; column++)
-		{
-			if (row == column)
+	for (int row = 0; row < ROWS; row++) {
+		for (int column = 0; column < COLUMNS; column++) {
+			if (row == column || row + column == min(COLUMNS, ROWS) - 1 ||
+				row == ROWS / 2 || column == COLUMNS / 2)
 				cout << array2[row][column] << "  ";
 			else
-				if (row + column == (COLUMNS < ROWS ? COLUMNS : ROWS) - 1)
-					cout << array2[row][column] << "  ";
-				else
-					if (row == ROWS / 2)
-						cout << array2[row][column] << "  ";
-					else
-						if (column == COLUMNS / 2)
-							cout << array2[row][column] << "  ";
-						else
-							cout << "   ";
+				cout << "   ";
 		}
 		cout << endl;
 	}
 
-
-	// Finding the maximum and minimum element of a matrix
+	// Нахождение максимального и минимального элемента
 	int rowMaxIndex = 0, colMaxIndex = 0, rowMinIndex = 0, colMinIndex = 0;
-	for (int row = 0; row < ROWS; ++row)
-	{
-		for (int col = 0; col < COLUMNS; ++col)
-		{
-			if (array2[row][col] > array2[rowMaxIndex][colMaxIndex])
-			{
+	for (int row = 0; row < ROWS; ++row) {
+		for (int col = 0; col < COLUMNS; ++col) {
+			if (array2[row][col] > array2[rowMaxIndex][colMaxIndex]) {
 				rowMaxIndex = row;
 				colMaxIndex = col;
 			}
-			else
-			{
-				if (array2[row][col] < array2[rowMinIndex][colMinIndex])
-				{
-					rowMinIndex = row;
-					colMinIndex = col;
-				}
+			else if (array2[row][col] < array2[rowMinIndex][colMinIndex]) {
+				rowMinIndex = row;
+				colMinIndex = col;
 			}
 		}
 	}
 
-	cout << "\nMax element is: " << array2[rowMaxIndex][colMaxIndex] << ", it is situated: [" << rowMaxIndex << "][" << colMaxIndex << "]";
-	cout << "\nMin element is: " << array2[rowMinIndex][colMinIndex] << ", it is situated: [" << rowMinIndex << "][" << colMinIndex << "]\n\n";
+	cout << "\nMax element is: " << array2[rowMaxIndex][colMaxIndex]
+		<< ", it is situated: [" << rowMaxIndex << "][" << colMaxIndex << "]";
+	cout << "\nMin element is: " << array2[rowMinIndex][colMinIndex]
+		<< ", it is situated: [" << rowMinIndex << "][" << colMinIndex << "]\n\n";
 
-
-	// Counting the number of Min and Max in a matrix
+	// Подсчет количества максимумов и минимумов с цветовой подсветкой
 	int maxCounter = 0, minCounter = 0;
-	for (int row = 0; row < ROWS; ++row)
-	{
-		for (int col = 0; col < COLUMNS; ++col)
-		{
-			if (array2[row][col] == array2[rowMaxIndex][colMaxIndex])
-			{
-				cout << "\x1B[95m";
-				maxCounter++;
-			}
-			else
-				if (array2[row][col] == array2[rowMinIndex][colMinIndex])
-				{
-					cout << "\x1B[96m";
-					minCounter++;
-				}
-
-			cout << array2[row][col] << " ";
-			// if ((array2[row][col] == array2[rowMaxIndex][colMaxIndex]) || (array2[row][col] == array2[rowMinIndex][colMinIndex]))
-			{
-				cout << "\033[0m";
-			}
-		}
-		cout << endl;
-	}
-	cout << "\nMax element is: " << array2[rowMaxIndex][colMaxIndex] << ", it is quantity: " << maxCounter;
-	cout << "\nMin element is: " << array2[rowMinIndex][colMinIndex] << ", it is quantity: " << minCounter;
-
-
-
-	// Swapping neighboring rows of a matrix (even and odd rows)
-	cout << "\n\n";
 	int max = array2[rowMaxIndex][colMaxIndex];
 	int min = array2[rowMinIndex][colMinIndex];
-	int temp;
-	for (int row = 0; row < ROWS; row += 2)
-	{
-		for (int col = 0; col < COLUMNS; ++col)
-		{
-			temp = array2[row][col];
-			array2[row][col] = array2[row + 1][col];
-			array2[row + 1][col] = temp;
-		}
-	}
-
-
-	// Coloring of Max and Min value during matrix printing
-	for (int row = 0; row < ROWS; ++row)
-	{
-		for (int col = 0; col < COLUMNS; ++col)
-		{
-			if (array2[row][col] == max)
-			{
-				cout << "\x1B[95m";
-			}
-			if (array2[row][col] == min)
-			{
-				cout << "\x1B[96m";
-			}
+	for (int row = 0; row < ROWS; ++row) {
+		for (int col = 0; col < COLUMNS; ++col) {
+			if (array2[row][col] == max) { cout << "\x1B[95m"; maxCounter++; }
+			else if (array2[row][col] == min) { cout << "\x1B[96m"; minCounter++; }
 
 			cout << array2[row][col] << " ";
 			// This will not work here: 
 			// if ((array2[row][col] == array2[rowMaxIndex][colMaxIndex]) || (array2[row][col] == array2[rowMinIndex][colMinIndex]))
-			if ((array2[row][col] == max) || (array2[row][col] == min))
-			{
-				cout << "\033[0m";
-			}
+			if ((array2[row][col] == max) || (array2[row][col] == min)) cout << "\033[0m";
 		}
 		cout << endl;
 	}
+	cout << "\nMax element quantity: " << maxCounter << ", Min element quantity: " << minCounter << endl;
 
-
-	// Swapping neighboring matrix columns (even and odd)
-	cout << "\n\n";
-	for (int col = 0; col < COLUMNS; col += 2)
-	{
-		for (int row = 0; row < ROWS; ++row)
-		{
-			temp = array2[row][col];
-			array2[row][col] = array2[row][col + 1];
-			array2[row][col + 1] = temp;
-		}
-	}
-
-	// Coloring of Max and Min value during matrix printing
-	for (int row = 0; row < ROWS; ++row)
-	{
+	// Обмен соседних строк (четная-нечетная)
+	int temp;
+	for (int row = 0; row < ROWS; row += 2)
 		for (int col = 0; col < COLUMNS; ++col)
-		{
-			if (array2[row][col] == max)
-			{
-				cout << "\x1B[95m";
-			}
-			if (array2[row][col] == min)
-			{
-				cout << "\x1B[96m";
-			}
+			swap(array2[row][col], array2[row + 1][col]);
 
-			cout << array2[row][col] << " ";
-			if ((array2[row][col] == max) || (array2[row][col] == min))
-			{
-				cout << "\033[0m";
-			}
-		}
-		cout << endl;
-	}
+	// Обмен соседних столбцов
+	for (int col = 0; col < COLUMNS; col += 2)
+		for (int row = 0; row < ROWS; ++row)
+			swap(array2[row][col], array2[row][col + 1]);
 
-	// Matrix arithmetic operations
-	cout << "\n\n----------------------------\n\n";
+	// Арифметические операции над небольшими матрицами
 	const int N = 5;
-	int m1[N][N] = { 0 }, m2[N][N] = { 0 }, m3[N][N]{};
-
-	for (int row = 0; row < N; row++)
-	{
-		for (int col = 0; col < N; col++)
-		{
+	int m1[N][N] = { 0 }, m2[N][N] = { 0 }, m3[N][N] = { 0 };
+	for (int row = 0; row < N; ++row)
+		for (int col = 0; col < N; ++col) {
 			m1[row][col] = rand() % 10;
 			m2[row][col] = rand() % 10;
-			m3[row][col] = m1[row][col] + m2[row][col]; // // Sum of corresponding values of 2 matrices and store in third matrix 
-		}
-	}
-
-	// Printing matrices horizontaly
-	for (int row = 0; row < N; row++)
-	{
-		for (int col = 0; col < N; col++)
-		{
-			cout << m1[row][col] << " ";
+			m3[row][col] = m1[row][col] + m2[row][col]; // сложение матриц
 		}
 
+	// Вывод матриц горизонтально
+	for (int row = 0; row < N; ++row) {
+		for (int col = 0; col < N; ++col) cout << m1[row][col] << " ";
 		cout << "\t";
-		for (int col = 0; col < N; col++)
-		{
-			cout << m2[row][col] << " ";
-		}
-
+		for (int col = 0; col < N; ++col) cout << m2[row][col] << " ";
 		cout << "\t";
-		for (int col = 0; col < N; col++)
-		{
-			cout << setw(4) << m3[row][col];
-		}
-
+		for (int col = 0; col < N; ++col) cout << setw(4) << m3[row][col];
 		cout << endl;
 	}
-	cout << endl;
 
-	// Multiply of corresponding values of 2 matrices
-	for (int row = 0; row < N; row++)
-	{
-		for (int col = 0; col < N; col++)
-		{
+	// Умножение матриц поэлементно
+	for (int row = 0; row < N; ++row)
+		for (int col = 0; col < N; ++col)
 			m3[row][col] = m1[row][col] * m2[row][col];
-		}
-	}
 
-	// Printing matrices horizontaly
-	for (int row = 0; row < N; row++)
-	{
-		for (int col = 0; col < N; col++)
-		{
-			cout << m1[row][col] << " ";
-		}
-
+	// Вывод результатов умножения
+	for (int row = 0; row < N; ++row) {
+		for (int col = 0; col < N; ++col) cout << m1[row][col] << " ";
 		cout << "\t";
-		for (int col = 0; col < N; col++)
-		{
-			cout << m2[row][col] << " ";
-		}
-
+		for (int col = 0; col < N; ++col) cout << m2[row][col] << " ";
 		cout << "\t";
-		for (int col = 0; col < N; col++)
-		{
-			cout << setw(4) << m3[row][col];
-		}
-
+		for (int col = 0; col < N; ++col) cout << setw(4) << m3[row][col];
 		cout << endl;
 	}
 
-
-	// 3D array
+	// 3D массив (дополнительный пример)
 	const int LAYERS = 2;
 	int array3D[LAYERS][ROWS][COLUMNS]{};
-	for (int layer = 0; layer < LAYERS; layer++)
-	{
-		for (int row = 0; row < ROWS; row++)
-		{
-			for (int column = 0; column < COLUMNS; column++)
-			{
+	for (int layer = 0; layer < LAYERS; ++layer)
+		for (int row = 0; row < ROWS; ++row)
+			for (int column = 0; column < COLUMNS; ++column)
 				array3D[layer][row][column] = rand() % 100;
-			}
-		}
-	}
 
 	cout << endl << "3D arrays: Layers of Matrices" << endl;
-	for (int layer = 0; layer < LAYERS; layer++)
-	{
-		for (int row = 0; row < ROWS; row++)
-		{
-			for (int column = 0; column < COLUMNS; column++)
-			{
+	for (int layer = 0; layer < LAYERS; ++layer) {
+		for (int row = 0; row < ROWS; ++row) {
+			for (int column = 0; column < COLUMNS; ++column)
 				cout << setw(4) << array3D[layer][row][column];
-			}
 			cout << endl;
 		}
 		cout << endl;
@@ -382,66 +210,128 @@ static void example1() {
 }
 
 /// <summary>
-///	Задан Двумерный массив вещественных чисел. Найти:
-/// а) максимальную сумму абсолютных значений элементов по строкам и номер строки с такой суммой;
-/// б) максимальную сумму абсолютных значений элементов по столбцам и номер столбца с такой суммой
+/// Выполнение различных расчетов и агрегаций над 2D массивом:
+/// поиск максимальных сумм по строкам и столбцам.
 /// </summary>
-static void example2() {
-	const int ROWS = 10;
-	const int COLUMNS = 10;
-	const int RANGE = 10;
-	int array2[ROWS][COLUMNS] = { 0 };
+static void example2()
+{
+	cout << endl << " ---------------------------------------------";
+	cout << endl << "|   2D Arrays: Calculations and Aggregations  |";
+	cout << endl << " ---------------------------------------------" << endl << endl;
 
-	int product[ROWS][COLUMNS] = { 0 };
-	int sumForRows[ROWS] = { 0 };
-	int sumForCOLUMNS[COLUMNS] = { 0 };
+	const int ROWS = 5;
+	const int COLUMNS = 7;
+	int array[ROWS][COLUMNS]{};
 
-	for (int row = 0; row < ROWS; ++row)
-	{
+	srand(static_cast<unsigned>(time(nullptr))); // инициализация генератора случайных чисел
+
+	// Заполняем двумерный массив случайными числами от 0 до 9
+	cout << "Generated matrix:\n";
+	for (int row = 0; row < ROWS; ++row) {
+		for (int col = 0; col < COLUMNS; ++col) {
+			array[row][col] = rand() % 10;
+			cout << array[row][col] << "\t";
+		}
+		cout << endl;
+	}
+
+	// Вычисляем сумму элементов по строкам и выводим их
+	cout << endl << "Sum of each row:" << endl;
+	int totalSum = 0;                  // общая сумма по всей матрице
+	int sumRows[ROWS]{};               // массив для хранения сумм по строкам
+	for (int row = 0; row < ROWS; ++row) {
+		sumRows[row] = 0;              // обнуляем перед подсчетом
 		for (int col = 0; col < COLUMNS; ++col)
-		{
-			sumForRows[row] += abs(array2[row][col]);
+			sumRows[row] += array[row][col];
+		cout << "Row " << row << ": " << sumRows[row] << endl;
+		totalSum += sumRows[row];      // добавляем в общую сумму
+	}
+
+	// Вычисляем сумму элементов по столбцам
+	cout << endl << "Sum of each column:" << endl;
+	int sumColumns[COLUMNS]{};
+	for (int col = 0; col < COLUMNS; ++col) {
+		sumColumns[col] = 0;
+		for (int row = 0; row < ROWS; ++row)
+			sumColumns[col] += array[row][col];
+		cout << "Column " << col << ": " << sumColumns[col] << endl;
+	}
+
+	cout << endl << "Total sum of all elements: " << totalSum << endl;
+
+	// Поиск максимального и минимального элементов матрицы
+	int rowMax = 0, colMax = 0;
+	int rowMin = 0, colMin = 0;
+	for (int row = 0; row < ROWS; ++row) {
+		for (int col = 0; col < COLUMNS; ++col) {
+			if (array[row][col] > array[rowMax][colMax]) {
+				rowMax = row;
+				colMax = col;
+			}
+			else if (array[row][col] < array[rowMin][colMin]) {
+				rowMin = row;
+				colMin = col;
+			}
 		}
 	}
 
-	for (int row = 0; row < ROWS; ++row)
-	{
-		for (int col = 0; col < COLUMNS; ++col)
-		{
-			sumForCOLUMNS[col] += abs(array2[row][col]);
+	cout << endl << "Max element: " << array[rowMax][colMax]
+		<< " at position [" << rowMax << "][" << colMax << "]" << endl;
+	cout << "Min element: " << array[rowMin][colMin]
+		<< " at position [" << rowMin << "][" << colMin << "]" << endl;
+
+	// Подсчет количества максимальных и минимальных элементов
+	int maxCount = 0, minCount = 0;
+	for (int row = 0; row < ROWS; ++row) {
+		for (int col = 0; col < COLUMNS; ++col) {
+			if (array[row][col] == array[rowMax][colMax]) maxCount++;
+			if (array[row][col] == array[rowMin][colMin]) minCount++;
 		}
 	}
 
-	cout << endl << "Sums of rows absolute values: ";
+	cout << endl << "Max element repeats: " << maxCount
+		<< " times, Min element repeats: " << minCount << " times." << endl;
+
+	// Подсчет суммы чётных и нечётных элементов
+	int evenSum = 0, oddSum = 0;
 	for (int row = 0; row < ROWS; ++row)
-	{
-		cout << sumForRows[row] << "\t";
-	}
+		for (int col = 0; col < COLUMNS; ++col)
+			(array[row][col] % 2 == 0 ? evenSum : oddSum) += array[row][col];
 
-	cout << endl << "Sums of columns absolute values: ";
-	for (int col = 0; col < COLUMNS; ++col)
-	{
-		cout << sumForCOLUMNS[col] << "\t";
-	}
+	cout << endl << "Sum of even elements: " << evenSum << endl;
+	cout << "Sum of odd elements: " << oddSum << endl;
 
-	int maxRowSumsIndex = 0, maxCOLUMNSumsIndex = 0;
+	// Пример поиска строки с наибольшей суммой элементов
+	int maxRowIndex = 0;
 	for (int row = 1; row < ROWS; ++row)
-	{
-		if (sumForRows[row] > sumForRows[maxRowSumsIndex])
-			maxRowSumsIndex = row;
-	}
-	for (int col = 1; col < COLUMNS; ++col)
-	{
-		if (sumForCOLUMNS[col] > sumForCOLUMNS[maxCOLUMNSumsIndex])
-			maxCOLUMNSumsIndex = col;
+		if (sumRows[row] > sumRows[maxRowIndex]) maxRowIndex = row;
+
+	cout << endl << "Row with maximum sum is Row " << maxRowIndex
+		<< " with sum " << sumRows[maxRowIndex] << endl;
+
+	// Сортировка строк по возрастанию их сумм (пузырьковая сортировка)
+	for (int i = 0; i < ROWS - 1; ++i) {
+		for (int j = 0; j < ROWS - i - 1; ++j) {
+			if (sumRows[j] > sumRows[j + 1]) {
+				swap(sumRows[j], sumRows[j + 1]);
+				for (int k = 0; k < COLUMNS; ++k)
+					swap(array[j][k], array[j + 1][k]); // синхронно переставляем строки
+			}
+		}
 	}
 
-	cout << endl << "Maximum of Sums of rows absolute values: \x1B[105m" << sumForRows[maxRowSumsIndex] << "\033[0m";
-	cout << endl << "Maximum of Sums of COLUMNS absolute values: \x1B[105m" << sumForCOLUMNS[maxCOLUMNSumsIndex] << "\033[0m";
+	cout << endl << "Matrix sorted by row sums (ascending):" << endl;
+	for (int row = 0; row < ROWS; ++row) {
+		for (int col = 0; col < COLUMNS; ++col)
+			cout << array[row][col] << "\t";
+		cout << endl;
+	}
+	cout << endl;
 }
 
+
 /// <summary>
-/// Произвести расчёт разнообразной статистики по результатам работы корпорации из 8 филиалов в течение 12 месяцев
+/// Финансовый анализ: произвести расчёт разнообразной статистики по результатам работы корпорации из 8 филиалов в течение 12 месяцев
 /// </summary>
 static void example3()
 {
@@ -450,175 +340,130 @@ static void example3()
 	cout << endl << " -----------------------------------------------------------------" << endl << endl;
 
 	const int MONTHS = 12, COMPANIES = 8;
-	int income[MONTHS][COMPANIES]{};
+	int income[MONTHS][COMPANIES]{}; // матрица доходов: строки - месяцы, столбцы - компании
 
-	for (int month = 0; month < MONTHS; month++)
-	{
+	srand(static_cast<unsigned>(time(nullptr))); // инициализация генератора случайных чисел
+
+	// Генерация доходов корпорации для каждой компании в каждом месяце
+	for (int month = 0; month < MONTHS; month++) {
 		cout << month + 1 << ") ";
 		for (int company = 0; company < COMPANIES; company++)
-		{
-			cout << (income[month][company] = rand() % 20) << "\t";
-		}
+			cout << (income[month][company] = rand() % 20) << "\t"; // доход от 0 до 19
 		cout << endl;
 	}
-	cout << endl;
 
+	// Массивы для хранения итогов по месяцам и компаниям
 	int totalIncomeByMonth[MONTHS]{}, totalIncomeByCompanies[COMPANIES]{};
 	double averageIncomeByMonth[MONTHS]{}, averageIncomeByCompanies[COMPANIES]{};
 	double averageInCorporation = 0;
 
-	for (int month = 0; month < MONTHS; month++)
-		totalIncomeByMonth[month] = 0;
-	for (int company = 0; company < COMPANIES; company++)
-		totalIncomeByCompanies[company] = 0;
+	// Обнуляем суммы (на всякий случай, хотя инициализация выше это уже сделала)
+	for (int month = 0; month < MONTHS; month++) totalIncomeByMonth[month] = 0;
+	for (int company = 0; company < COMPANIES; company++) totalIncomeByCompanies[company] = 0;
 
-	for (int month = 0; month < MONTHS; month++)
-	{
+	// Считаем суммарный доход по месяцам
+	for (int month = 0; month < MONTHS; month++) {
 		for (int company = 0; company < COMPANIES; company++)
-		{
-			totalIncomeByMonth[month] += income[month][company];
-		}
-		averageIncomeByMonth[month] = (double)totalIncomeByMonth[month] / MONTHS;
+			totalIncomeByMonth[month] += income[month][company]; // суммируем по строке
+		averageIncomeByMonth[month] = static_cast<double>(totalIncomeByMonth[month]) / COMPANIES; // средний доход за месяц
 	}
 
 	cout << "totalIncomeByMonth:" << endl;
 	for (int month = 0; month < MONTHS; month++)
-	{
 		cout << totalIncomeByMonth[month] << "\t";
-	}
 
 	cout << endl << "averageIncomeByMonth:" << endl;
 	for (int month = 0; month < MONTHS; month++)
-	{
 		cout << averageIncomeByMonth[month] << "\t";
-	}
 
-	for (int company = 0; company < COMPANIES; company++)
-	{
+	// Считаем суммарный доход по компаниям (столбцы)
+	for (int company = 0; company < COMPANIES; company++) {
 		for (int month = 0; month < MONTHS; month++)
-		{
-			totalIncomeByCompanies[company] += income[month][company];
-		}
-		averageIncomeByCompanies[company] = (double)totalIncomeByCompanies[company] / COMPANIES;
+			totalIncomeByCompanies[company] += income[month][company]; // суммируем по столбцу
+		averageIncomeByCompanies[company] = static_cast<double>(totalIncomeByCompanies[company]) / MONTHS; // средний доход компании
 	}
 
-	cout << endl;
-	cout << "totalIncomeByCompanies:" << endl;
+	cout << endl << "totalIncomeByCompanies:" << endl;
 	for (int company = 0; company < COMPANIES; company++)
-	{
 		cout << totalIncomeByCompanies[company] << "\t";
-	}
 
 	cout << endl << "averageIncomeByCompanies:" << endl;
 	for (int company = 0; company < COMPANIES; company++)
-	{
 		cout << averageIncomeByCompanies[company] << "\t";
-	}
 
+	// Средний доход по корпорации
 	for (int company = 0; company < COMPANIES; company++)
-	{
 		averageInCorporation += averageIncomeByCompanies[company];
-	}
 	averageInCorporation /= COMPANIES;
 	cout << endl << "averageInCorporation: " << averageInCorporation << endl;
 
+	// Компании с доходом выше среднего
 	cout << "Companis with income more than average in corporation:" << endl;
 	for (int company = 0; company < COMPANIES; company++)
-	{
 		if (averageIncomeByCompanies[company] > averageInCorporation)
 			cout << company << ") " << averageIncomeByCompanies[company] << endl;
-	}
 
 	cout << endl;
 
+	// Поиск максимального и минимального дохода в корпорации
 	int maxMonth = 0, maxCompany = 0;
 	int minMonth = 0, minCompany = 0;
-	for (int company = 0; company < COMPANIES; company++)
-	{
-		for (int month = 0; month < MONTHS; month++)
-		{
-			if (income[company][month] > income[maxCompany][maxMonth])
-			{
-				maxCompany = company;
+	for (int company = 0; company < COMPANIES; company++) {
+		for (int month = 0; month < MONTHS; month++) {
+			if (income[month][company] > income[maxMonth][maxCompany]) {
 				maxMonth = month;
+				maxCompany = company;
 			}
-			else
-			{
-				if (income[company][month] < income[minCompany][minMonth])
-				{
-					minCompany = company;
-					minMonth = month;
-				}
+			else if (income[month][company] < income[minMonth][minCompany]) {
+				minMonth = month;
+				minCompany = company;
 			}
 		}
 	}
-	cout << "Max income in corporation is: " << income[maxCompany][maxMonth] << endl;
-	cout << "Min income in corporation is: " << income[minCompany][minMonth] << endl;
 
+	cout << "Max income in corporation is: " << income[maxMonth][maxCompany] << endl;
+	cout << "Min income in corporation is: " << income[minMonth][minCompany] << endl;
+
+	// Подсчет количества повторений максимального и минимального дохода
 	int maxCounter = 0, minCounter = 0;
-	for (int company = 0; company < COMPANIES; company++)
-	{
-		for (int month = 0; month < MONTHS; month++)
-		{
-			if (income[maxCompany][maxMonth] == income[company][month])
-			{
-				maxCounter++;
-			}
-			// TODO: Correct min counter
-			if (income[minCompany][minMonth] == income[company][month])
-			{
-				minCounter++;
-			}
+	for (int company = 0; company < COMPANIES; company++) {
+		for (int month = 0; month < MONTHS; month++) {
+			if (income[month][company] == income[maxMonth][maxCompany]) maxCounter++;
+			if (income[month][company] == income[minMonth][minCompany]) minCounter++;
 		}
 	}
 
 	cout << "Max income in corporation found: " << maxCounter << " times" << endl;
 	cout << "Min income in corporation found: " << minCounter << " times" << endl;
 
-	cout << endl << "Sort by row Total Income by Company (totalIncomeByCompanies):" << endl;
-	for (int company = 0; company < COMPANIES; company++)
-	{
-		cout << totalIncomeByCompanies[company] << "\t";
-	}
-
+	// Сортировка компаний по суммарному доходу по столбцам (пузырьком)
 	int temp;
-	for (int month = 0; month < MONTHS; month++)
-	{
-		for (int company = 0; company < COMPANIES - 1; company++)
-		{
-			if (totalIncomeByCompanies[company] < totalIncomeByCompanies[company + 1])
-			{
-				temp = totalIncomeByCompanies[company];
-				totalIncomeByCompanies[company] = totalIncomeByCompanies[company + 1];
-				totalIncomeByCompanies[company + 1] = temp;
-
-				for (int submonth = 0; submonth < MONTHS; submonth++)
-				{
-					temp = income[submonth][company];
-					income[submonth][company] = income[submonth][company + 1];
-					income[submonth][company + 1] = temp;
+	for (int month = 0; month < MONTHS; month++) { // проходы по месяцам
+		for (int company = 0; company < COMPANIES - 1; company++) {
+			if (totalIncomeByCompanies[company] < totalIncomeByCompanies[company + 1]) {
+				swap(totalIncomeByCompanies[company], totalIncomeByCompanies[company + 1]);
+				for (int submonth = 0; submonth < MONTHS; submonth++) {
+					swap(income[submonth][company], income[submonth][company + 1]); // синхронный swap столбцов
 				}
 			}
 		}
 	}
 
-	cout << endl << endl;
+	// Вывод отсортированных сумм и доходов
+	cout << endl << "Sorted totalIncomeByCompanies:" << endl;
 	for (int company = 0; company < COMPANIES; company++)
-	{
 		cout << totalIncomeByCompanies[company] << "\t";
-	}
 
 	cout << endl << endl;
-	for (int month = 0; month < MONTHS; month++)
-	{
+	cout << "Sorted income matrix by company totals:" << endl;
+	for (int month = 0; month < MONTHS; month++) {
 		for (int company = 0; company < COMPANIES; company++)
-		{
 			cout << income[month][company] << "\t";
-		}
 		cout << endl;
 	}
 	cout << endl;
 }
+
 
 int main()
 {
@@ -626,6 +471,5 @@ int main()
 	example2(); // simple matrix processing
 	example3(); // realword arrays2D example
 
-	cout << endl;
-	cout << endl;
+	cout << endl << endl;
 }
